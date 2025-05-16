@@ -1,5 +1,6 @@
 import { Router } from "express"
 import AlunoController from "./controller/AlunoController";
+import CursoController from "./controller/CursoController";
 
 
 const router = Router();
@@ -12,6 +13,10 @@ router.get
 
 // CRUD Aluno
 router.get("/listar/alunos", AlunoController.todos);  // rota de listagem de alunos
+
+
+// CRUD Curso
+router.get("/listar/cursos", CursoController.todos); // rota de listagem de cursos
 
 
 export { router }

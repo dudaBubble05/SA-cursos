@@ -20,5 +20,13 @@ server.use(express.json());
 // configurando as rotas no servidor
 server.use(router);
 
+// definindo a porta do servidor
+const PORT = process.env.PORT || 3332;
+
+// iniciando o servidor na porta definida
+server.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
+
 //exportando o servidor para ser utilizado em outros arquivos
 export {server};

@@ -1,4 +1,3 @@
-import { cursorTo } from "readline";
 import { DatabaseModel } from "./DatabaseModel";
 
 // Recupera conexão com o banco 

@@ -26,7 +26,8 @@ export class Aluno {
      * @param celular
      */
 
-    public constructor (nome: string, sobrenome: string, dataNascimento: Date, endereco: string, email: string, celular: string) {
+    public constructor (ra: string, nome: string, sobrenome: string, dataNascimento: Date, endereco: string, email: string, celular: string) {
+        this.ra               = ra;
         this.nome             = nome;
         this.sobrenome        = sobrenome;
         this.dataNascimento   = dataNascimento;
@@ -179,6 +180,7 @@ export class Aluno {
 
             respostaBD.rows.forEach((aluno: any) => {
                 let novoAluno = new Aluno (
+                    aluno.ra,
                     aluno.nome,
                     aluno.sobrenome,
                     aluno.data_nascimento,
@@ -199,4 +201,44 @@ export class Aluno {
         }
     }
     
+    /**
+     * Método de cadastrar um novo aluno no banco de dados
+     * @param aluno objeto Aluno contendo as informações a serem cadastradas
+     * @return Boolean indicando se o cadastro foi bem-sucedido
+     */
+    static async cadastradasAluno(aluno: Aluno): Promise<Boolean> {
+        try {
+            // Cria uma consulta para inserir o registro de um aluno no banco de dados
+            const queryInsertAluno =   `INSERT INTO Aluno (ra, nome, sobrenome, data_nascimento, endereco, email, celular)
+                                        VALUES ( '${aluno.getRA().toUpperCase()}',
+                                                 '${aluno.getNome().toUpperCase()}',
+                                                 '${aluno.getSobrenome().toUpperCase()}',
+                                                 '${aluno.getDataNascimento()}',
+                                                 '${aluno.getEndereco().toUpperCase()}',
+                                                 '${aluno.getEmail().toLowerCase()}',
+                                                '${aluno.getCelular()}'
+                                        )
+                                        RETURNING id_aluno;`
+            
+            // Executa a query no banco de dados e armazena o resultado
+            const result = await database.query(queryInsertAluno);
+
+            // verifica se a quantidade de linhas que foram inseridadas é maior que 0
+            if(result.rows.length > 0) {
+                //Exibe a mensagem de sucesso
+                console.log(`Aluno cadastrado com sucesso. ID: ${result.rows[0].id_aluno}`);
+                // retorna verdadeiro
+                return true;
+            }
+            // caso a consulta não tenha tido sucesso, retorna falso
+            return false
+
+        // captura o error
+        } catch (error) {
+            // exibe mensagem com detalhes de erro no console
+            console.error(`Erro ao cadastrar aluno: ${error}`);
+            //retorna falso
+            return false;
+        }
+    }
 }

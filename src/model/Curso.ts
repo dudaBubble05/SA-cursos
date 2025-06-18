@@ -194,4 +194,44 @@ export class Curso {
             return null;        
         }
     }
+
+    /**
+     * Realiza o cadastro de um curso no banco de dados.
+     * 
+     * @param curso obejto que contem as infromações de um curso.
+     * @returns Boolean que indica se o cadastro foi bem sucedido
+     */
+    static async cadastrarCurso(curso: Curso): Promise<boolean> {
+        try {
+            // Cria uma consulta para inserir o registro de um aluno no banco de dados.
+            const queryInsertCurso = `INSERT INTO curso (nomeCurso, cargaHorariaTotal, duracaoSemestres, departamento, turno, numeroVagas)
+                                      VALUES ('${curso.getNomeCurso().toUpperCase()}}',
+                                              '${curso.getCargaHorariaTotal().toUpperCase()}',
+                                              '${curso.getDuracaoSemestres().toUpperCase()}',
+                                              '${curso.getDepartamento().toUpperCase()}',
+                                              '${curso.getTurno().toUpperCase()}',
+                                              '${curso.getNumeroVagas()}) 
+                                      RETURNING id_curso;`
+            
+            // executa a query no banco de dados e armazena a resposta 
+            const respostaBD = await database.query(queryInsertCurso);
+
+            // verifica se a quantidade de linahs modificadas é diferente de 0
+            if(respostaBD.rowCount != 0) {
+                console.log(`Curso cadastrado com sucesso! ID do Curso: ${respostaBD.rows[0].id_curso}`);
+                // 'true' para cadastro bem-sucedido
+                return true;
+            }
+            // 'false' para cadastro não feito
+            return false;
+
+          // tratando o erro.  
+        } catch (error) {
+            console.log('Erro ao cadastrar o curso. Verifique os logs para mais detalhes.');
+            console.log(error);
+            return false;
+        }
+    }
+
+    
 }

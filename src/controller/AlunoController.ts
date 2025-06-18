@@ -48,7 +48,7 @@ class AlunoController extends Aluno {
             );
 
             // chama o método para o aluno no banco de dados
-            const result = await Aluno.cadastradasAluno(novoAluno);
+            const result = await Aluno.cadastrarAluno(novoAluno);
 
             // Verfica se a query foi executada com sucesso
             if(result) {

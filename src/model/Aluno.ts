@@ -204,7 +204,7 @@ export class Aluno {
      * @param aluno objeto Aluno contendo as informações a serem cadastradas
      * @return Boolean indicando se o cadastro foi bem-sucedido
      */
-    static async cadastradasAluno(aluno: Aluno): Promise<Boolean> {
+    static async cadastrarAluno(aluno: Aluno): Promise<Boolean> {
         try {
             // Cria uma consulta para inserir o registro de um aluno no banco de dados
             const queryInsertAluno =   `INSERT INTO Aluno (ra, nome, sobrenome, data_nascimento, endereco, email, celular)

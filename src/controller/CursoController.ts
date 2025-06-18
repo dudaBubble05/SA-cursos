@@ -91,6 +91,10 @@ class CursoController extends Curso {
             return res.status(400).json({mensagem: "Erro ao remover o curso. Entre em contato com administrador do sistema."});
         }
     }
+
+    /**
+     * Método controller de atualização de um curso
+     */
 }
 
 export default CursoController;

@@ -39,7 +39,6 @@ class AlunoController extends Aluno {
 
             //Instanciando objeto aluno
             const novoAluno = new Aluno (
-                recebido.ra,
                 recebido.nome,
                 recebido.sobrenome,
                 recebido.dataNascimento,
@@ -60,6 +59,58 @@ class AlunoController extends Aluno {
         } catch (error) {
             console.log(`Erro ao cadastrar aluno: ${error}`)
             return  res.status(404).json(`Erro ao cadastrar aluno`);
+        }
+    }
+
+    /**
+     * Remove um aluno do banco de dados baseado no ID fornecido.
+     * @param req
+     * @param res
+     * @returns retorna uma promise que se true, a remoção foi bem sucedida, e false se não.
+     * @throws Lança um erro caso ocorra um erro na execução da consulta
+     */
+    static async remover(req: Request, res: Response): Promise<any> {
+        try {
+            const idAluno = parseInt(req.params.idAluno as string);
+            const respostaModelo = await Aluno.removerAluno
+        } catch (error) {
+            
+        }
+    }
+
+    /**
+     * Atualiza um aluno do banco de dados.
+     * @param req
+     * @param res
+     * @returns retorna uma promise que se true, a remoção foi bem sucedida, e false se não.
+     * @throws Lança um erro caso ocorra um erro na execução da consulta.
+     */
+    static async atualizar(req: Request, res: Response): Promise<any> {
+        try {
+            const AlunoRecebido: AlunoDTO = req.body;
+
+            const idAlunoRecebido = parseInt(req.params.idAluno);
+
+            const alunoAtualizado = new Aluno (
+                AlunoRecebido.nome,
+                AlunoRecebido.sobrenome,
+                AlunoRecebido.dataNascimento,
+                AlunoRecebido.endereco,
+                AlunoRecebido.email,
+                AlunoRecebido.celular
+            );
+
+            alunoAtualizado.setIdAluno(idAlunoRecebido);
+
+            const respostaModelo = await Aluno.atualizarAluno(alunoAtualizado);
+
+            if(respostaModelo) {
+                return res.status(200).json({mensagem: "Aluno atualizado com sucesso!"});
+            } else {
+                return res.status(400).json({mensagem: "Não foi possível remover o aluno. Entre em contato com o administrador do sistema."});
+            }
+        } catch (error) {
+            
         }
     }
 }

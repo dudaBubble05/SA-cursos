@@ -26,8 +26,7 @@ export class Aluno {
      * @param celular
      */
 
-    public constructor (ra: string, nome: string, sobrenome: string, dataNascimento: Date, endereco: string, email: string, celular: string) {
-        this.ra               = ra;
+    constructor (nome: string, sobrenome: string, dataNascimento: Date, endereco: string, email: string, celular: string) {
         this.nome             = nome;
         this.sobrenome        = sobrenome;
         this.dataNascimento   = dataNascimento;
@@ -180,7 +179,6 @@ export class Aluno {
 
             respostaBD.rows.forEach((aluno: any) => {
                 let novoAluno = new Aluno (
-                    aluno.ra,
                     aluno.nome,
                     aluno.sobrenome,
                     aluno.data_nascimento,
@@ -238,6 +236,69 @@ export class Aluno {
             // exibe mensagem com detalhes de erro no console
             console.error(`Erro ao cadastrar aluno: ${error}`);
             //retorna falso
+            return false;
+        }
+    }
+
+    /**
+     * Remove um aluno do banco de dados baseado no ID fornecido.
+     * @param idAluno - ID do aluno a ser removido.
+     * @returns retorna uma promise que se true, a remoção foi bem sucedida, e false se não.
+     * @throws Lança um erro caso ocorra um erro na execução da consulta
+     */
+    static async removerAluno(idAluno: number): Promise<any> {
+        try {
+
+            // cria uma consultapara remover aluno
+            const queryDeleteAluno = `DELETE FROM aluno WHERE id_aluno = ${idAluno}`;
+ 
+            const respostaBD = await database.query(queryDeleteAluno);
+
+            // Executa a query de remoção de aluno e vefica se foi bem sucedida.
+            if(respostaBD.rowCount != 0) {
+                console.log(`Aluno removido com sucesso! ID removido: ${idAluno}`);
+                return true;
+            }
+
+            return false;
+
+        // captura qualquer erro que possa ocorrer    
+        } catch (error) {
+            console.log('Erro ao remover o aluno.')
+            console.log(error);
+            return false
+        }
+    }
+
+    /**
+     * Atualiza as informações de um aluno no banco de dados.
+     * 
+     * @param aluno - contem as informações atualizadas do aluno.
+     * @returns envia uma promessa para verificar se foi, ou não, atualizado.
+     * @throws Lança um erro se ocorrer um problema durante a atualização do aluno
+     */
+    static async atualizarAluno(aluno: Aluno): Promise<boolean> {
+        try {
+            const queryUpdateAluno = `UPDATE aluno SET 
+                                      nome = '${aluno.getNome()}', 
+                                      sobrenome = '${aluno.getSobrenome()}',
+                                      data_nascimento = '${aluno.getDataNascimento()}',
+                                      endereco = '${aluno.getEndereco()}',
+                                      email = '${aluno.getEmail()}',
+                                      celular = '${aluno.getCelular()}',
+                                      WHERE id_aluno = ${aluno.getIdAluno()};`
+
+            const respostaBD = await database.query(queryUpdateAluno);
+            
+            if(respostaBD.rowCount != 0) {
+                console.log(`Aluno atualizado com sucesso. ID: ${aluno.getIdAluno()}`);
+                return true;
+            }
+
+            return false;
+
+        } catch (error) {
+            console.log('Erro ao remover o aluno. Consulte o servidor para amis detalhes.');
             return false;
         }
     }

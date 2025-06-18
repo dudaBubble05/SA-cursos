@@ -31,6 +31,7 @@ class AlunoController extends Aluno {
      * @param req
      * @param res
      * @returns Mensagem de sucesso ou erro em JSON
+     * @throws Lança um erro caso ocorra um erro na execução da consulta
      */
     static async cadastrar(req: Request, res: Response): Promise <any>{
         try {

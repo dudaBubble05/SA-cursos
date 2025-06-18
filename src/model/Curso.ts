@@ -1,3 +1,4 @@
+import { queryObjects } from "v8";
 import { DatabaseModel } from "./DatabaseModel";
 
 // Recupera conexão com o banco 
@@ -233,5 +234,71 @@ export class Curso {
         }
     }
 
-    
+    /**
+     * Remove um curso do banco de dados com base no ID fornecido.
+     * 
+     * @param idCurso
+     * @return - retorna uma promessa para verificar se foi bem sucedida, ou não, a remoção do curso.
+     * @throws - lança um erro caso ocorra um problema na remoção do curso.
+     */
+    static async removerCurso(idCurso: number): Promise<boolean> {
+        try {
+            // cria uma query para deletar um objeto do banco de dados.
+            const queryDeleteCurso = `DLETE FROM curso WHERE id_curso = ${idCurso}`;
+
+            // executa a query e armazena a resposta do banco de dados.
+            const respostaBD = await database.query(queryDeleteCurso);
+
+            // verifica se a quantidade de linhas alteradas é diferente de 0.
+            if(respostaBD.rowCount != 0) {
+                console.log(`Curso removido com sucesso, ID removido: ${idCurso}`);
+                return true;
+            } else {
+                return false;
+            }
+
+        // trata qualquer erro que possa acontecer no processo.    
+        } catch (error) {
+            console.log(`Erro ao remover curso, consulte o servidor para mais detalhes.`);
+            console.log(error);
+            return false;
+        }
+    }
+
+    /**
+     * Atualiza as informações de um curso no banco dados.
+     * @param curso - contem as informações atualizadas do objeto curso.
+     * @returns - retorna uma promessa que verifica o sucesso da atualização.
+     * @throws - lança um erro caso ocorra um problema na atualização;
+     */
+    static async atualizarCurso(curso: Curso): Promise<boolean> {
+        try {
+            // cria a query de update a ser executada no banco de dados.
+            const queryUpdateCurso = `UPDATE curso SET
+                                      nome_curso = '${curso.getNomeCurso()}'
+                                      carga_horaria_total = '${curso.getCargaHorariaTotal()}'
+                                      duracao_semestres = '${curso.getDuracaoSemestres()}'
+                                      departamento = '${curso.getDepartamento()}'
+                                      turno = '${curso.getTurno()}'
+                                      numero_vagas = '${curso.getNumeroVagas()}'
+                                      WHRE id_curso = ${curso.getIdCurso()};`;
+            
+            // excuta a query e armazena a resposta do banco em uma variável.
+            const respostaBD = await database.query(queryUpdateCurso);
+            
+            // verifica se alguma linha foi alterada
+            if(respostaBD.rowCount != 0) {
+                console.log(`Curso atualizado com sucesso, ID atualizado: ${curso.getIdCurso()}`);
+                return true;
+            } else {
+                return false;
+            }
+
+        // trata qualquer erro que possa acontecer no processo.    
+        } catch (error) {
+            console.log(`Erro ao atualizar curso, consulte o servidor para mais detalhes.`);
+            console.log(error);
+            return false;
+        }
+    }
 }

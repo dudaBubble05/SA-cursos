@@ -298,7 +298,7 @@ export class Aluno {
             return false;
 
         } catch (error) {
-            console.log('Erro ao remover o aluno. Consulte o servidor para amis detalhes.');
+            console.log('Erro ao remover o aluno. Consulte o servidor para mais detalhes.');
             return false;
         }
     }

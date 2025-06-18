@@ -81,7 +81,7 @@ class CursoController extends Curso {
 
             // verifica se a resposta do modelo foi verdadeira
             if(respostaModelo) {
-                return res.status(200).json({mensagem: "Curso rmovido com sucesso."});
+                return res.status(200).json({mensagem: "Curso removido com sucesso."});
             } else {
                 return res.status(400).json({mensagem: "Erro ao remover o curso. Entre em contato com administrador do sistema."});
             }
@@ -94,7 +94,47 @@ class CursoController extends Curso {
 
     /**
      * Método controller de atualização de um curso
+     * @param req
+     * @param res
+     * @returns Mensagem de sucesso ou erro em JSON
+     * @throws Lança um erro caso ocorra um erro na execução da consulta
      */
+    static async atualizar(req: Request, res: Response): Promise<any> {
+        try {
+            // recuperando informações do corpo da requisição a serem atualizados 
+            const cursoRecebido: CursoDTO = req.body;
+
+            // recupera o ID do Curso a ser atualizado
+            const idCursoRecebido = parseInt(req.params.idCurso as string);
+
+            // instanciando um objeto do tipo curso
+            const cursoAtualizado = new Curso(
+                cursoRecebido.nomeCurso,
+                cursoRecebido.cargaHorariaTotal,
+                cursoRecebido.duracaoSemestres,
+                cursoRecebido.departamento,
+                cursoRecebido.turno,
+                cursoRecebido.numeroVagas
+            ); 
+
+            // adicionando o ID do Curso no objeto cursoAtualizado
+            cursoAtualizado.setIdCurso(idCursoRecebido);
+
+            // chamando a função atualizar do curso e gaurdando a resposta
+            const respostaModelo =  await Curso.atualizarCurso(cursoAtualizado);
+
+            // verifica se a resposta do modelo é verdadeira
+            if(respostaModelo) {
+                return res.status(200).json({mensagem: "Curso atualizado com sucesso."});
+            } else {
+                return res.status(400).json({mensagem: "Erro ao atualizar o curso. Entre em contato com administrador do sistema."});
+            }
+        // trata de qualquer erro que aconteça durante o processo   
+        } catch (error) {
+            console.log(`Erro ao atualizar curso. ${error}`);
+            return res.status(400).json({mensagem: "Erro ao atualizar o curso. Entre em contato com administrador do sistema."});
+        }
+    }
 }
 
 export default CursoController;

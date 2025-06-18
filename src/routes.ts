@@ -21,7 +21,10 @@ router.put("/atualizar/aluno/:idAluno", AlunoController.atualizar) // rota que a
  
 // CRUD Curso
 router.get("/listar/cursos", CursoController.todos); // rota de listagem de cursos
-
+router.post("/novo/curso", CursoController.novo); // Rota de cadastro de cursos
+router.delete("/deletar/curso/:idCurso", CursoController.remover); // rota para deletar um curso
+router.put("/atualizar/curso/:idCurso", CursoController.atualizar) // rota que atualiza um curso
+ 
 
 // CRUD Matricula
 router.get("/listar/matriculas", MatriculaController.todos);

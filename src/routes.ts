@@ -15,8 +15,10 @@ router.get("/", (_req, res) => {
 
 // CRUD Aluno
 router.get("/listar/alunos", AlunoController.todos);  // rota de listagem de alunos
-router.post("/novo/aluno", AlunoController.cadastrar) // Rota de cadastro de alunos
-
+router.post("/novo/aluno", AlunoController.cadastrar); // Rota de cadastro de alunos
+router.delete("/deletar/aluno/:idAluno", AlunoController.remover); // rota para deletar um aluno
+router.put("/atualizar/aluno/:idAluno", AlunoController.atualizar) // rota que atualiza um aluno
+ 
 // CRUD Curso
 router.get("/listar/cursos", CursoController.todos); // rota de listagem de cursos
 

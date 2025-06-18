@@ -159,4 +159,34 @@ export class Matricula {
         }
     }
 
+    /**
+     * Método de cadastro de uma nova matrícula
+     * @param idAluno
+     * @param idCurso
+     * @param dataMatricula
+     * 
+     * @returns
+     * @throws
+     */
+    static async cadastroMatricula(idAluno: number, idCurso: number, dataMatricula: Date): Promise<boolean> {
+        try {
+            // cria uma consulta para inserir o registro de uma matricula no banco de dados
+            const queryInsertMatricula = `INSERT INTO matricula(id_aluno, id_curso, data_matricula)
+                                          VALUES (${idAluno},
+                                                  ${idCurso},
+                                                  ${dataMatricula}
+                                          )
+                                          RETURNING id_matricula;`;
+
+            // executa a query de resposta do banco de dados
+            const respostaBD = await database.query(queryInsertMatricula);
+
+            // verifica se a quantidade de linhas modificadas foi diferente de 0.
+            if(respostaBD.rowCount != 0) {
+                console.log(`Nova Matrícula cadastrada com sucesso. ID matrícula: `)
+            }
+        } catch (error) {
+            
+        }
+    }
 }
